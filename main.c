@@ -11,13 +11,13 @@ typedef struct
 
 } Etudient;
 
-void Afficher_Etudients(Etudient *e, int size)
+void Afficher_Etudients(Etudient *e, int count)
 {
     printf("==================================================================================================================================\n");
     printf("#                                             Les Informations des etudients                                                     #\n");
     printf("==================================================================================================================================\n");
     printf("#        CNE        |        Nom        |        Prenom        |                               Notes                             #\n");
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < count; i++)
     {
         printf("# %-18s| %-18s| %-14s       | ", e[i].cne, e[i].nom, e[i].prenom);
         for (int j = 0; j < 4; j++)
@@ -68,6 +68,99 @@ void ajouterEtudiant(Etudient **e, int *size, int *count)
         }
     }
 }
+void supprimierEtduiant(Etudient **e, int *size, int *count)
+{
+    char cne[20];
+    printf("S il vous plait saisir le CNE de l'etudiant qui Supprimier : ");
+    scanf("%s", cne);
+    int index = recherch_par_cne(*e, count, cne);
+    for (int i = 0; i < *size; i++)
+    {
+        if ((*e)[i].cne == (*e)[index].cne)
+        {
+            printf("%s", (*e)[i].cne);
+
+            for (int j = index; j < *size - 1; j++)
+            {
+                strcpy((*e)[j].cne, (*e)[j + 1].cne);
+            }
+            (*count)--;
+            (*size) -= 2;
+        }
+    }
+}
+// void modifierEtudient(Etudient **e, int count)
+// {
+//     char cne[20];
+//     scanf("%s", &cne);
+//     int index = recherch_par_cne(*e, count, cne);
+//     for (int i = 0; i < count; i++)
+//     {
+//         if ((*e)[index].cne == (*e)[i].cne)
+//         {
+//             int choix;
+
+//             printf("\n===============================================================\n");
+//             printf("                      MENU PRINCIPAL                           \n");
+//             printf("===============================================================\n");
+//             printf("#  1 # Changer le CNE                                         #\n");
+//             printf("#  2 # Changer le Nom                                         #\n");
+//             printf("#  3 # Changer le Prenom                                      #\n");
+//             printf("#  4 # Changer les notes                                      #\n");
+//             printf("#  5 # Changer Tout les informations                          #\n");
+//             printf("#  0 # Quitter                                                #\n");
+//             printf("===============================================================\n\n");
+//             printf("s'il vous plaite saisir CNE de l'etudient qui modifier : ");
+//             print("Saisir le choix qui change : ");
+//             scanf("%d", choix);
+//             switch (choix)
+//             {
+//             case 1:
+//                 char cin_n[20];
+//                 printf("Saisir la nauvelle Cne de %s : ", (*e)[index].cne);
+//                 scanf("%s",cin_n);
+//                 strcpy((*e)[index].cne,cin_n);
+//                 break;
+//             case 2:
+//                 char nom_n[40];
+//                 printf("Saisir la nauvelle Nom de %s : ", (*e)[index].nom);
+//                 scanf("%s",nom_n);
+//                 strcpy((*e)[index].nom,nom_n);
+//                 break;
+//             case 3:
+//                 for (int i = 0; i < 4; i++)
+//                 {
+//                     printf("Saisir la nauvelle note %d de l etudient  %s : ",i+1, (*e)[index].prenom);
+//                     scanf("%f", (*e)[index].notes[i]);
+//                 }
+//                 break;
+//             case 4:
+//                 char prenom_n[40];
+//                 printf("Saisir la nauvelle Cne de %s : ", (*e)[index].prenom);
+//                 scanf("%s",prenom_n);
+//                 strcpy((*e)[index].prenom,prenom_n);
+//                 break;
+//             case 5:
+//                 printf("Saisir la nauvelle Cne de %s : ", (*e)[index].cne);
+//                 scanf("%s",(*e)[index].cne);
+//                 printf("Saisir la nauvelle Cne de %s : ", (*e)[index].nom);
+//                 scanf("%s",(*e)[index].nom);
+//                 printf("Saisir la nauvelle Cne de %s : ", (*e)[index].prenom);
+//                 scanf("%s",(*e)[index].prenom);
+//                 for (int i = 0; i < 4; i++)
+//                 {
+//                     printf("Saisir la note %d de l'etudient %s",i+1,(*e)[index].nom);
+//                     scanf("%f",(*e)[index].notes[i]);
+//                 }
+                
+//                 break;
+
+//             default:
+//                 break;
+//             }
+//         }
+//     }
+// }
 
 int recherch_par_cne(Etudient *e, int count, char mot[])
 {
@@ -83,6 +176,7 @@ int recherch_par_cne(Etudient *e, int count, char mot[])
 
 void saisirNotes(Etudient **e, int count)
 {
+
     char cne[20];
     printf("S il vous plait saisir le CNE de letudiant qui va saisir les notes : ");
     scanf("%s", cne);
@@ -173,8 +267,7 @@ void afficherBulletin(Etudient **e, int count)
 
 int main()
 {
-
-    int size = 3;
+    int size = 2;
     int count = 2;
     Etudient *e = malloc(size * sizeof(Etudient));
     int choix;
@@ -201,11 +294,13 @@ int main()
         printf("                      MENU PRINCIPAL                           \n");
         printf("===============================================================\n");
         printf("#  1 # Ajouter un etudiant                                    #\n");
-        printf("#  2 # Saisir les notes d un etudiant                         #\n");
-        printf("#  3 # Afficher tous les etudiants                            #\n");
-        printf("#  4 # Afficher le bulletin d un etudiant                     #\n");
-        printf("#  5 # Calculer la moyenne generale par un etudient           #\n");
-        printf("#  6 # Afficher la moyenne generale de classe                 #\n");
+        printf("#  2 # Afficher tous les etudiants                            #\n");
+        printf("#  3 # Saisir les notes d un etudiant                         #\n");
+        printf("#  4 # Modifier un etudient                                   #\n");
+        printf("#  5 # Suppremier un etudiant                                 #\n");
+        printf("#  6 # Afficher le bulletin d un etudiant                     #\n");
+        printf("#  7 # Calculer la moyenne generale par un etudient           #\n");
+        printf("#  8 # Afficher la moyenne generale de classe                 #\n");
         printf("#  0 # Quitter                                                #\n");
         printf("===============================================================\n\n");
         printf("S'il vous plait chaoise une choix : ");
@@ -216,15 +311,21 @@ int main()
             ajouterEtudiant(&e, &size, &count);
             break;
         case 2:
-            saisirNotes(&e, count);
-            break;
-        case 3:
             Afficher_Etudients(e, count);
             break;
+        case 3:
+            saisirNotes(&e, count);
+            break;
         case 4:
-            afficherBulletin(&e, count);
+            // modifierEtudient(&e, count);
             break;
         case 5:
+            supprimierEtduiant(&e, &size, &count);
+            break;
+        case 6:
+            afficherBulletin(&e, count);
+            break;
+        case 7:
         {
             printf("Entre cne de l'etudient qui calculer Moyonne genreal : ");
             scanf("%s", cne_etud);
@@ -234,7 +335,7 @@ int main()
             printf("===============================================================\n");
             break;
         }
-        case 6:
+        case 8:
             calculerMoyenneGenerale(&e, count);
             break;
         case 0:
